@@ -1,4 +1,4 @@
-from cohere import ClientV2
+from cohere import Client
 from flask import Flask, request, jsonify, send_file
 from flask_cors import CORS, cross_origin
 import requests
@@ -144,7 +144,7 @@ def ask_ai():
         if not COHERE_API_KEY:
             return jsonify({'error': 'Missing COHERE_API_KEY'}), 500
         print(f"[ASK_AI] Prompt gửi lên Cohere: {prompt}: Trả lời ngắn gọn, súc tích, hướng tới người tiêu dùng và sức khỏe.")
-        client = ClientV2(api_key=COHERE_API_KEY)
+        client = Client(api_key=COHERE_API_KEY)
         ai_answer = ""
         try:
             response = client.chat(
@@ -283,7 +283,7 @@ def predict():
             ai_answer = "[AI Warning] Thiếu COHERE_API_KEY nên không thể gọi AI."
         else:
             try:
-                client = ClientV2(api_key=COHERE_API_KEY)
+                client = Client(api_key=COHERE_API_KEY)
                 response = client.chat(
                     model="command-a-03-2025",
                     messages=[{"role": "user", "content": prompt}],
