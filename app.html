@@ -267,6 +267,37 @@
             elements.loadingScreen = document.getElementById('loadingScreen');
 
             console.log('✅ App initialized successfully');
+
+            // Warm up backend to avoid cold start delays
+            warmBackend();
+        });
+
+        // Warm-up function to wake server (Render cold start)
+        async function warmBackend() {
+            const healthUrl = `${API_BASE_URL}/health`;
+            try {
+                const controller = new AbortController();
+                const t = setTimeout(() => controller.abort(), 4000);
+                const res = await fetch(healthUrl, { method: 'GET', signal: controller.signal, cache: 'no-store' });
+                clearTimeout(t);
+                console.log('🟢 Backend warm-up status:', res.status);
+            } catch (e) {
+                console.warn('🟠 Backend warm-up failed (will retry silently):', e?.message || e);
+                // Retry once after a short delay
+                setTimeout(async () => {
+                    try {
+                        const r = await fetch(healthUrl, { method: 'GET', cache: 'no-store' });
+                        console.log('🟢 Backend warm-up retry status:', r.status);
+                    } catch {}
+                }, 3000);
+            }
+        });
+
+        // Re-warm when tab becomes visible again after being idle
+        document.addEventListener('visibilitychange', () => {
+            if (document.visibilityState === 'visible') {
+                warmBackend();
+            }
         });
 
         // Camera Functions
@@ -591,33 +622,57 @@
             addChatMessage('Đang trả lời...', 'assistant', loadingId);
             
             try {
-                const response = await fetch(`${API_BASE_URL}/chat`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        message: message,
-                        context: appState.selectedImage ? 'Người dùng đã chụp/chọn ảnh thực phẩm.' : null
-                    })
-                });
+                // Simple retry for backend cold start: up to 2 attempts
+                const attemptFetch = async (attempt = 1) => {
+                    const response = await fetch(`${API_BASE_URL}/chat`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            message: message,
+                            context: appState.selectedImage ? 'Người dùng đã chụp/chọn ảnh thực phẩm.' : null
+                        })
+                    });
+                    console.log('📥 Chat response status:', response.status);
+                    
+                    // If backend is waking up (502/503/504), wait and retry once
+                    if ((response.status === 502 || response.status === 503 || response.status === 504) && attempt < 2) {
+                        addChatMessage('⏳ Server đang khởi động, vui lòng đợi vài giây...', 'assistant');
+                        await new Promise(r => setTimeout(r, 3500));
+                        return attemptFetch(attempt + 1);
+                    }
+                    
+                    // Ensure JSON before parsing
+                    const ct = response.headers.get('content-type') || '';
+                    if (!response.ok) {
+                        let errMsg = `HTTP ${response.status}`;
+                        if (ct.includes('application/json')) {
+                            try { const e = await response.json(); errMsg = e.error || errMsg; } catch {}
+                        } else {
+                            // Read as text (likely HTML error page)
+                            try { await response.text(); } catch {}
+                        }
+                        throw new Error(errMsg);
+                    }
+                    
+                    if (!ct.includes('application/json')) {
+                        // Not JSON (e.g., an HTML error page). Show friendly error
+                        throw new Error('Phản hồi không hợp lệ từ server (không phải JSON).');
+                    }
+                    
+                    return response.json();
+                };
                 
-                console.log('📥 Chat response status:', response.status);
-                
-                if (!response.ok) {
-                    const errorResult = await response.json();
-                    throw new Error(errorResult.error || `HTTP ${response.status}`);
-                }
-                
-                const result = await response.json();
+                const result = await attemptFetch();
                 console.log('💬 Chat result:', result);
                 
                 // Remove loading message
                 document.getElementById(loadingId)?.remove();
                 
-                if (result.error) {
+                if (result && result.error) {
                     addChatMessage('Lỗi: ' + result.error, 'assistant');
-                } else if (result.response) {
+                } else if (result && result.response) {
                     addChatMessage(result.response, 'assistant');
                 } else {
                     addChatMessage('Xin lỗi, tôi không thể trả lời ngay bây giờ. Vui lòng thử lại sau.', 'assistant');
@@ -626,7 +681,7 @@
             } catch (error) {
                 console.error('❌ Chat error:', error);
                 document.getElementById(loadingId)?.remove();
-                addChatMessage('Lỗi kết nối. Vui lòng thử lại sau.', 'assistant');
+                addChatMessage('Lỗi kết nối hoặc server đang khởi động. Vui lòng thử lại sau.', 'assistant');
             }
         }
 
