@@ -1,7 +1,7 @@
 # API redirects to Render backend
-/predict https://foodninja-backend-latest.onrender.com/predict 200
-/chat https://foodninja-backend-latest.onrender.com/chat 200
-/ask_ai https://foodninja-backend-latest.onrender.com/ask_ai 200
+/predict https://nckh-nutrition-food.onrender.com/predict 200
+/chat https://nckh-nutrition-food.onrender.com/chat 200
+/ask_ai https://nckh-nutrition-food.onrender.com/ask_ai 200
 
 # SPA fallback for PWA
 /* /app.html 200

@@ -149,13 +149,15 @@ def ask_ai():
         try:
             response = client.chat(
                 model="command-a-03-2025",
-                messages=[{"role": "user", "content": prompt}],
+                message=prompt,
                 temperature=0.3
             )
-            # Lấy kết quả theo chuẩn tài liệu Cohere
-            ai_answer = response.message.content[0].text if response.message and response.message.content else ""
+            # Ưu tiên lấy từ response.text; fallback sang cấu trúc cũ nếu có
+            ai_answer = getattr(response, 'text', None) or (
+                response.message.content[0].text if getattr(response, 'message', None) and getattr(response.message, 'content', None) else ""
+            )
             print(f"[ASK_AI] Cohere trả về: {ai_answer}")
-            if not ai_answer.strip():
+            if not ai_answer or not str(ai_answer).strip():
                 ai_answer = "[AI Warning] Cohere không trả về nội dung. Hãy kiểm tra lại prompt hoặc quota API."
         except Exception as e:
             ai_answer = f"[AI Error] {str(e)}"
@@ -286,12 +288,14 @@ def predict():
                 client = Client(api_key=COHERE_API_KEY)
                 response = client.chat(
                     model="command-a-03-2025",
-                    messages=[{"role": "user", "content": prompt}],
+                    message=prompt,
                     temperature=0.3
                 )
-                ai_answer = response.message.content[0].text if response.message and response.message.content else ""
+                ai_answer = getattr(response, 'text', None) or (
+                    response.message.content[0].text if getattr(response, 'message', None) and getattr(response.message, 'content', None) else ""
+                )
                 logger.info(f"Cohere response received: {ai_answer}")
-                if not ai_answer.strip():
+                if not ai_answer or not str(ai_answer).strip():
                     ai_answer = "[AI Warning] Cohere không trả về nội dung. Hãy kiểm tra lại prompt hoặc quota API."
             except Exception as e:
                 ai_answer = f"[AI Error] {str(e)}"
@@ -330,10 +334,12 @@ def chat():
         client = Client(api_key=COHERE_API_KEY)
         response = client.chat(
             model="command-a-03-2025",
-            messages=[{"role": "user", "content": user_message}],
+            message=user_message,
             temperature=0.3
         )
-        ai_answer = response.message.content[0].text if response.message and response.message.content else ""
+        ai_answer = getattr(response, 'text', None) or (
+            response.message.content[0].text if getattr(response, 'message', None) and getattr(response.message, 'content', None) else ""
+        )
         if not ai_answer.strip():
             ai_answer = "[AI Warning] Cohere không trả về nội dung. Hãy kiểm tra lại prompt hoặc quota API."
         return jsonify({"response": ai_answer})
