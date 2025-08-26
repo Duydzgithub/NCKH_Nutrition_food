@@ -1,0 +1,1205 @@
+/* ========================================
+   Food Ninja - App Styles
+   ======================================== */
+
+/* Emergency CSS Fixes */
+body {
+    font-family: 'Inter', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f9fa;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.app-container {
+    min-height: 100vh;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    background: #f8f9fa;
+}
+
+#app {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.app-header {
+    background: white;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.app-title {
+    font-weight: 600;
+    font-size: 1.5rem;
+    color: #2ECC71;
+}
+
+.main-content {
+    padding: 2rem 1rem;
+}
+
+/* Quick Camera Section */
+.camera-section {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.camera-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.btn {
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: #2ECC71;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #27AE60;
+}
+
+.btn-outline-primary {
+    background: transparent;
+    color: #2ECC71;
+    border: 2px solid #2ECC71;
+}
+
+.btn-outline-primary:hover {
+    background: #2ECC71;
+    color: white;
+}
+
+#previewImg {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.hidden {
+    display: none !important;
+}
+
+/* ========================================
+   Loading Screen
+   ======================================== */
+
+.loading-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  display: none !important; /* Force hide loading screen */
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  transition: opacity 0.5s ease;
+}
+
+.loading-content {
+  text-align: center;
+  color: white;
+}
+
+.loading-logo {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  font-size: 2rem;
+  animation: pulse 2s infinite;
+}
+
+.loading-text {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 20px;
+}
+
+.loading-spinner .spinner-border {
+  width: 3rem;
+  height: 3rem;
+  border-width: 4px;
+}
+
+/* ========================================
+   Emergency CSS fixes
+   ======================================== */
+
+/* Emergency CSS fix for disappearing app */
+#app {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.app-main {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  flex: 1 !important;
+}
+
+.view {
+  min-height: calc(100vh - 200px) !important;
+}
+
+.view.active {
+  display: block !important;
+  opacity: 1 !important;
+  animation: none !important; /* Disable animations temporarily */
+  visibility: visible !important;
+}
+
+#homeView {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.loading-screen {
+  display: none !important;
+}
+
+/* Ensure no conflicting display rules */
+.app-container {
+  display: flex !important;
+  flex-direction: column !important;
+  min-height: 100vh !important;
+}
+
+/* Force container visibility */
+.container {
+  display: block !important;
+  visibility: visible !important;
+}
+
+/* ========================================
+   Camera Controls Enhancement
+   ======================================== */
+
+/* Camera Controls Styling */
+.camera-controls {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  background: rgba(0, 0, 0, 0.8);
+  padding: 15px;
+  border-radius: 15px;
+  backdrop-filter: blur(10px);
+}
+
+.camera-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+}
+
+.capture-btn {
+  width: 80px;
+  height: 80px;
+  border-radius: 50% !important;
+  border: 4px solid white;
+  background: #28a745 !important;
+  color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.capture-btn:hover {
+  transform: scale(1.1);
+  background: #218838 !important;
+}
+
+.capture-btn i {
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.capture-btn span {
+  font-size: 10px;
+  font-weight: bold;
+}
+
+#cameraVideo {
+  width: 100%;
+  height: auto;
+  border-radius: 15px;
+  background: #000;
+  position: relative;
+}
+
+.camera-container {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   App Container
+   ======================================== */
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--light);
+}
+
+/* ========================================
+   App Header
+   ======================================== */
+
+.app-header {
+  background: white;
+  box-shadow: var(--shadow-sm);
+  padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: var(--z-sticky);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.app-logo {
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: var(--border-radius);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.app-title {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+}
+
+.header-actions .btn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ========================================
+   Main Content Area
+   ======================================== */
+
+.app-main {
+  flex: 1;
+  padding: 2rem 0;
+  overflow-x: hidden;
+}
+
+/* ========================================
+   View System
+   ======================================== */
+
+.view {
+  display: none;
+  min-height: calc(100vh - 200px);
+}
+
+.view.active {
+  display: block;
+  animation: fadeIn 0.3s ease;
+}
+
+/* ========================================
+   Camera Section
+   ======================================== */
+
+.camera-section {
+  margin-bottom: 2rem;
+}
+
+.camera-container {
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.camera-area {
+  border: 3px dashed var(--gray-300);
+  border-radius: var(--border-radius-lg);
+  padding: 3rem 2rem;
+  text-align: center;
+  background: white;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+  min-height: 400px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.camera-area:hover {
+  border-color: var(--primary);
+  background: rgba(46, 204, 113, 0.05);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.camera-area.drag-over {
+  border-color: var(--primary);
+  background: rgba(46, 204, 113, 0.1);
+  transform: scale(1.02);
+}
+
+.camera-content {
+  width: 100%;
+}
+
+.camera-icon {
+  width: 100px;
+  height: 100px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.5rem;
+  font-size: 2.5rem;
+  color: white;
+  animation: pulse 2s infinite;
+}
+
+.camera-area h4 {
+  font-size: 1.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+  margin-bottom: 0.5rem;
+}
+
+.camera-area p {
+  color: var(--gray-600);
+  margin-bottom: 2rem;
+}
+
+.camera-buttons .btn {
+  margin: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-lg);
+}
+
+/* ========================================
+   Image Preview
+   ======================================== */
+
+.image-preview {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+}
+
+.image-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.image-overlay .btn {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  box-shadow: var(--shadow);
+}
+
+/* ========================================
+   Analysis Progress
+   ======================================== */
+
+.analysis-progress {
+  max-width: 500px;
+  margin: 2rem auto;
+}
+
+.progress-card {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+.progress-header h5 {
+  margin: 0;
+  color: var(--gray-800);
+  font-weight: var(--font-weight-semibold);
+}
+
+.progress {
+  height: 12px;
+  border-radius: 6px;
+  background: var(--gray-200);
+  overflow: hidden;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  transition: width 0.3s ease;
+}
+
+.progress-text {
+  text-align: center;
+  color: var(--gray-600);
+  font-weight: var(--font-weight-medium);
+  margin-top: 1rem;
+}
+
+/* ========================================
+   Results Section
+   ======================================== */
+
+.results-section {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.result-card {
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.result-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.result-header {
+  background: var(--gray-100);
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.result-header h5 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+  display: flex;
+  align-items: center;
+}
+
+.result-content {
+  padding: 2rem;
+}
+
+/* ========================================
+   Food Result Display
+   ======================================== */
+
+.food-result {
+  text-align: center;
+}
+
+.food-result .food-name {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  color: var(--gray-900);
+  margin-bottom: 1rem;
+}
+
+.food-result .confidence-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-weight: var(--font-weight-medium);
+  margin-bottom: 1rem;
+}
+
+.confidence-high {
+  background: var(--success);
+  color: white;
+}
+
+.confidence-medium {
+  background: var(--warning);
+  color: white;
+}
+
+.confidence-low {
+  background: var(--danger);
+  color: white;
+}
+
+.alternatives-list {
+  margin-top: 1.5rem;
+}
+
+.alternative-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius);
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   Nutrition Display
+   ======================================== */
+
+.nutrition-result {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+.nutrition-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+@media (min-width: 768px) {
+  .nutrition-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.nutrition-item {
+  text-align: center;
+  padding: 1.5rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius-lg);
+  transition: all 0.3s ease;
+}
+
+.nutrition-item:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.nutrition-value {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.nutrition-label {
+  font-size: 0.9rem;
+  font-weight: var(--font-weight-medium);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.nutrition-table {
+  width: 100%;
+  margin-top: 1rem;
+}
+
+.nutrition-table th,
+.nutrition-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.nutrition-table th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-700);
+  background: var(--gray-100);
+}
+
+/* ========================================
+   AI Advice
+   ======================================== */
+
+.ai-advice {
+  background: linear-gradient(135deg, rgba(46, 204, 113, 0.1), rgba(52, 152, 219, 0.1));
+  padding: 2rem;
+  border-radius: var(--border-radius-lg);
+  border-left: 4px solid var(--primary);
+}
+
+.ai-advice .advice-text {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: var(--gray-800);
+  margin: 0;
+}
+
+.ai-advice .advice-source {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+/* ========================================
+   Result Actions
+   ======================================== */
+
+.result-actions {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--gray-200);
+}
+
+.result-actions .btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--border-radius-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ========================================
+   Quick Actions
+   ======================================== */
+
+.quick-actions h6 {
+  color: var(--gray-700);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 1rem;
+}
+
+.quick-action-btn {
+  width: 100%;
+  padding: 1.5rem 1rem;
+  background: white;
+  border: 2px solid var(--gray-200);
+  border-radius: var(--border-radius-lg);
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  color: var(--gray-700);
+}
+
+.quick-action-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.quick-action-btn i {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  display: block;
+}
+
+.quick-action-btn span {
+  font-weight: var(--font-weight-medium);
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   Chat Interface
+   ======================================== */
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+
+.chat-header {
+  background: var(--gray-100);
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+}
+
+.chat-header h5 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+}
+
+.chat-messages {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 400px);
+}
+
+.message {
+  display: flex;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 0.3s ease;
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 1rem;
+  flex-shrink: 0;
+}
+
+.ai-message .message-avatar {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+
+.user-message .message-avatar {
+  background: var(--gray-600);
+  color: white;
+  order: 2;
+  margin-right: 0;
+  margin-left: 1rem;
+}
+
+.message-content {
+  flex: 1;
+  background: var(--gray-100);
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius-lg);
+  max-width: 70%;
+}
+
+.user-message .message-content {
+  background: var(--primary);
+  color: white;
+  margin-left: auto;
+}
+
+.message-content p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+.chat-input {
+  padding: 1.5rem;
+  border-top: 1px solid var(--gray-200);
+  background: white;
+}
+
+.chat-input .form-control {
+  border-radius: var(--border-radius-lg);
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+}
+
+.chat-input .btn {
+  border-radius: var(--border-radius-lg);
+  padding: 1rem 1.5rem;
+}
+
+/* ========================================
+   History View
+   ======================================== */
+
+.history-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.history-header h5 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+}
+
+.history-list {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.history-item {
+  background: white;
+  padding: 1.5rem;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.history-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.history-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-food-name {
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+}
+
+.history-date {
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.history-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.history-stat {
+  text-align: center;
+  padding: 0.75rem;
+  background: var(--gray-100);
+  border-radius: var(--border-radius);
+}
+
+.history-stat-value {
+  font-weight: var(--font-weight-bold);
+  color: var(--primary);
+  display: block;
+}
+
+.history-stat-label {
+  font-size: 0.8rem;
+  color: var(--gray-600);
+  margin-top: 0.25rem;
+}
+
+/* ========================================
+   Settings View
+   ======================================== */
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.settings-header h5 {
+  margin: 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+}
+
+.settings-content {
+  max-width: 600px;
+}
+
+.settings-group {
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--gray-200);
+}
+
+.settings-group h6 {
+  margin-bottom: 1.5rem;
+  color: var(--gray-800);
+  font-weight: var(--font-weight-semibold);
+  border-bottom: 1px solid var(--gray-200);
+  padding-bottom: 0.5rem;
+}
+
+.setting-item {
+  margin-bottom: 1.5rem;
+}
+
+.setting-item:last-child {
+  margin-bottom: 0;
+}
+
+.setting-item .form-label {
+  font-weight: var(--font-weight-medium);
+  color: var(--gray-700);
+  margin-bottom: 0.5rem;
+}
+
+/* ========================================
+   Bottom Navigation
+   ======================================== */
+
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid var(--gray-200);
+  padding: 0.5rem;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.5rem;
+  z-index: var(--z-fixed);
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0.75rem 0.5rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--border-radius);
+  color: var(--gray-600);
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.nav-item.active {
+  color: var(--primary);
+  background: rgba(46, 204, 113, 0.1);
+}
+
+.nav-item:hover {
+  color: var(--primary);
+  background: rgba(46, 204, 113, 0.05);
+}
+
+.nav-item i {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+}
+
+/* ========================================
+   Install Prompt
+   ======================================== */
+
+.install-prompt {
+  position: fixed;
+  bottom: 100px;
+  left: 1rem;
+  right: 1rem;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 1px solid var(--gray-200);
+  z-index: var(--z-modal);
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+.install-content {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.install-icon {
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.install-text {
+  flex: 1;
+}
+
+.install-text h6 {
+  margin: 0 0 0.25rem 0;
+  font-weight: var(--font-weight-semibold);
+  color: var(--gray-800);
+}
+
+.install-text p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--gray-600);
+}
+
+.install-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.install-actions .btn {
+  padding: 0.5rem 1rem;
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+/* ========================================
+   Responsive Design
+   ======================================== */
+
+@media (max-width: 768px) {
+  .app-main {
+    padding: 1rem 0;
+    padding-bottom: 100px; /* Space for bottom nav */
+  }
+  
+  .camera-area {
+    padding: 2rem 1rem;
+    min-height: 300px;
+  }
+  
+  .camera-icon {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+  }
+  
+  .nutrition-result {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .result-actions .btn {
+    display: block;
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .chat-container {
+    height: calc(100vh - 150px);
+  }
+  
+  .chat-messages {
+    max-height: calc(100vh - 300px);
+  }
+  
+  .message-content {
+    max-width: 85%;
+  }
+  
+  .install-prompt {
+    bottom: 120px;
+  }
+}
+
+@media (max-width: 576px) {
+  .camera-area {
+    padding: 1.5rem 1rem;
+    min-height: 250px;
+  }
+  
+  .camera-area h4 {
+    font-size: 1.2rem;
+  }
+  
+  .camera-buttons .btn {
+    display: block;
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .nutrition-result {
+    grid-template-columns: 1fr;
+  }
+  
+  .quick-action-btn {
+    padding: 1rem 0.5rem;
+  }
+  
+  .quick-action-btn i {
+    font-size: 1.5rem;
+  }
+}
+
+/* ========================================
+   Print Styles
+   ======================================== */
+
+@media print {
+  .app-header,
+  .bottom-nav,
+  .install-prompt,
+  .camera-section,
+  .result-actions {
+    display: none !important;
+  }
+  
+  .app-container {
+    background: white !important;
+  }
+  
+  .result-card {
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
+    break-inside: avoid;
+  }
+}

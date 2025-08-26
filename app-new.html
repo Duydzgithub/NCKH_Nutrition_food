@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Food Ninja - AI Nutrition Analyzer</title>
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#2E7D32">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="Food Ninja">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="assets/icons/icon-192x192.svg">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="assets/css/app-professional.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen hidden">
+        <div class="loading-logo">
+            <i class="fas fa-utensils"></i>
+        </div>
+        <div class="loading-text">Food Ninja</div>
+        <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col">
+                        <h1 class="app-title">
+                            <i class="fas fa-utensils app-logo"></i>
+                            Food Ninja
+                        </h1>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Camera Section -->
+            <section class="camera-section">
+                <div class="card-header">
+                    <h2 class="card-title">
+                        <i class="fas fa-camera text-primary"></i>
+                        Chụp hoặc chọn ảnh thực phẩm
+                    </h2>
+                </div>
+                <div class="card-body">
+                    <div class="camera-container">
+                        <!-- Camera View -->
+                        <div id="cameraView" class="camera-view">
+                            <video id="cameraVideo" class="camera-video hidden" autoplay playsinline></video>
+                            <canvas id="cameraCanvas" class="hidden"></canvas>
+                            <div id="cameraOverlay" class="camera-overlay">
+                                <i class="fas fa-camera"></i>
+                                <p class="mt-2 mb-0">Nhấn để chụp ảnh hoặc chọn từ thư viện</p>
+                            </div>
+                        </div>
+                        
+                        <!-- Image Preview -->
+                        <div id="imagePreview" class="image-preview hidden">
+                            <img id="previewImg" src="" alt="Preview" class="preview-img">
+                        </div>
+                    </div>
+                    
+                    <!-- Camera Controls -->
+                    <div class="camera-controls">
+                        <button class="btn btn-primary btn-lg" onclick="openCamera()" id="cameraBtn">
+                            <i class="fas fa-camera me-2"></i>
+                            Chụp ảnh
+                        </button>
+                        <button class="btn btn-outline-primary btn-lg" onclick="openGallery()">
+                            <i class="fas fa-images me-2"></i>
+                            Chọn từ thư viện
+                        </button>
+                        <input type="file" id="fileInput" accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+                        <button class="btn btn-success btn-lg hidden" onclick="analyzeImage()" id="analyzeBtn">
+                            <i class="fas fa-search me-2"></i>
+                            Phân tích thực phẩm
+                        </button>
+                        <button class="btn btn-secondary hidden" onclick="removeImage()" id="removeBtn">
+                            <i class="fas fa-trash me-2"></i>
+                            Xóa ảnh
+                        </button>
+                        <button class="btn btn-outline-secondary hidden" onclick="closeCamera()" id="closeCameraBtn">
+                            <i class="fas fa-times me-2"></i>
+                            Đóng camera
+                        </button>
+                        <button class="btn btn-primary hidden" onclick="capturePhoto()" id="captureBtn">
+                            <i class="fas fa-camera me-2"></i>
+                            Chụp
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Analysis Results Section -->
+            <section id="analysisResults" class="analysis-results hidden">
+                <div class="card-header">
+                    <div class="result-header">
+                        <h3 class="result-title">
+                            <i class="fas fa-check-circle text-success"></i>
+                            Kết quả phân tích
+                        </h3>
+                        <div id="confidenceBadge" class="confidence-badge">
+                            <i class="fas fa-chart-line me-1"></i>
+                            <span id="confidenceText">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div id="resultsContent">
+                        <!-- Results will be populated here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Chat Section -->
+            <section class="chat-section">
+                <div class="chat-header">
+                    <i class="fas fa-robot me-2"></i>
+                    Hỏi AI về dinh dưỡng
+                </div>
+                <div class="chat-container">
+                    <div id="chatMessages" class="chat-messages">
+                        <div class="chat-message message-assistant">
+                            <div class="message-bubble">
+                                Xin chào! Tôi có thể giúp bạn tìm hiểu về dinh dưỡng của thực phẩm. Hãy chụp ảnh hoặc hỏi tôi bất kỳ câu hỏi nào! 🍎
+                            </div>
+                        </div>
+                    </div>
+                    <div class="chat-input-container">
+                        <input type="text" id="chatInput" class="chat-input" placeholder="Hỏi về dinh dưỡng..." onkeypress="if(event.key==='Enter')sendChatMessage()">
+                        <button class="chat-send-btn" onclick="sendChatMessage()" id="sendBtn">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- PWA Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('service-worker.js')
+                .then(reg => console.log('✅ Service Worker registered'))
+                .catch(err => console.log('❌ Service Worker registration failed'));
+        }
+    </script>
+
+    <!-- App JavaScript -->
+    <script>
+        // App State
+        const appState = {
+            selectedImage: null,
+            isAnalyzing: false,
+            currentStream: null,
+            facingMode: 'environment' // 'user' for front camera, 'environment' for back camera
+        };
+
+        // API Configuration
+        const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' 
+            ? 'http://localhost:5000' 
+            : window.location.origin;
+
+        // DOM Elements
+        const elements = {
+            cameraVideo: null,
+            cameraCanvas: null,
+            previewImg: null,
+            imagePreview: null,
+            cameraOverlay: null,
+            analyzeBtn: null,
+            removeBtn: null,
+            closeCameraBtn: null,
+            captureBtn: null,
+            cameraBtn: null,
+            chatInput: null,
+            chatMessages: null,
+            loadingScreen: null
+        };
+
+        // Initialize DOM elements when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 Food Ninja App starting...');
+            
+            // Get DOM elements
+            elements.cameraVideo = document.getElementById('cameraVideo');
+            elements.cameraCanvas = document.getElementById('cameraCanvas');
+            elements.previewImg = document.getElementById('previewImg');
+            elements.imagePreview = document.getElementById('imagePreview');
+            elements.cameraOverlay = document.getElementById('cameraOverlay');
+            elements.analyzeBtn = document.getElementById('analyzeBtn');
+            elements.removeBtn = document.getElementById('removeBtn');
+            elements.closeCameraBtn = document.getElementById('closeCameraBtn');
+            elements.captureBtn = document.getElementById('captureBtn');
+            elements.cameraBtn = document.getElementById('cameraBtn');
+            elements.chatInput = document.getElementById('chatInput');
+            elements.chatMessages = document.getElementById('chatMessages');
+            elements.loadingScreen = document.getElementById('loadingScreen');
+
+            console.log('✅ App initialized successfully');
+        });
+
+        // Camera Functions
+        async function openCamera() {
+            try {
+                console.log('📹 Opening camera...');
+                
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: appState.facingMode }
+                });
+                
+                appState.currentStream = stream;
+                elements.cameraVideo.srcObject = stream;
+                
+                // Show video and hide overlay
+                elements.cameraVideo.classList.remove('hidden');
+                elements.cameraOverlay.classList.add('hidden');
+                
+                // Show camera controls
+                showCameraControls();
+                
+                console.log('✅ Camera opened successfully');
+            } catch (error) {
+                console.error('❌ Camera error:', error);
+                alert('Không thể mở camera. Vui lòng kiểm tra quyền truy cập camera.');
+            }
+        }
+
+        function closeCamera() {
+            if (appState.currentStream) {
+                appState.currentStream.getTracks().forEach(track => track.stop());
+                appState.currentStream = null;
+            }
+            
+            elements.cameraVideo.classList.add('hidden');
+            elements.cameraOverlay.classList.remove('hidden');
+            hideCameraControls();
+            
+            console.log('📹 Camera closed');
+        }
+
+        function showCameraControls() {
+            elements.cameraBtn.classList.add('hidden');
+            elements.closeCameraBtn.classList.remove('hidden');
+            elements.captureBtn.classList.remove('hidden');
+        }
+
+        function hideCameraControls() {
+            elements.cameraBtn.classList.remove('hidden');
+            elements.closeCameraBtn.classList.add('hidden');
+            elements.captureBtn.classList.add('hidden');
+        }
+
+        function capturePhoto() {
+            if (!elements.cameraVideo || !elements.cameraCanvas) return;
+            
+            const canvas = elements.cameraCanvas;
+            const video = elements.cameraVideo;
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0);
+            
+            // Convert to blob
+            canvas.toBlob(function(blob) {
+                if (blob) {
+                    appState.selectedImage = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+                    
+                    // Show preview
+                    const url = URL.createObjectURL(blob);
+                    elements.previewImg.src = url;
+                    showImagePreview();
+                    
+                    closeCamera();
+                    console.log('📸 Photo captured');
+                }
+            }, 'image/jpeg', 0.8);
+        }
+
+        function openGallery() {
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput) {
+                fileInput.click();
+            }
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (file) {
+                appState.selectedImage = file;
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    elements.previewImg.src = e.target.result;
+                    showImagePreview();
+                };
+                reader.readAsDataURL(file);
+                
+                console.log('📁 File selected:', file.name);
+            }
+        }
+
+        function showImagePreview() {
+            elements.imagePreview.classList.remove('hidden');
+            elements.cameraOverlay.classList.add('hidden');
+            elements.analyzeBtn.classList.remove('hidden');
+            elements.removeBtn.classList.remove('hidden');
+        }
+
+        function removeImage() {
+            appState.selectedImage = null;
+            elements.previewImg.src = '';
+            elements.imagePreview.classList.add('hidden');
+            elements.cameraOverlay.classList.remove('hidden');
+            elements.analyzeBtn.classList.add('hidden');
+            elements.removeBtn.classList.add('hidden');
+            
+            // Hide results
+            document.getElementById('analysisResults').classList.add('hidden');
+            
+            console.log('🗑️ Image removed');
+        }
+
+        // Analysis Functions
+        async function analyzeImage() {
+            if (!appState.selectedImage) {
+                alert('Vui lòng chọn ảnh trước khi phân tích.');
+                return;
+            }
+            
+            if (appState.isAnalyzing) {
+                alert('Đang phân tích, vui lòng chờ...');
+                return;
+            }
+            
+            console.log('🔍 Starting image analysis...');
+            appState.isAnalyzing = true;
+            
+            // Show loading state
+            elements.analyzeBtn.classList.add('loading');
+            elements.analyzeBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Đang phân tích...';
+            elements.analyzeBtn.disabled = true;
+            
+            try {
+                const formData = new FormData();
+                formData.append('image', appState.selectedImage);
+                
+                console.log('📤 Sending request to:', `${API_BASE_URL}/predict`);
+                console.log('📎 File size:', appState.selectedImage.size, 'bytes');
+                console.log('📎 File type:', appState.selectedImage.type);
+                
+                const response = await fetch(`${API_BASE_URL}/predict`, {
+                    method: 'POST',
+                    body: formData
+                });
+                
+                console.log('📥 Response status:', response.status, response.statusText);
+                
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    throw new Error(errorResult.error || `HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                console.log('📊 Analysis result:', result);
+                
+                if (result.error) {
+                    throw new Error(result.error);
+                } else {
+                    displayAnalysisResults(result);
+                }
+                
+            } catch (error) {
+                console.error('❌ Analysis error:', error);
+                alert('Lỗi phân tích: ' + error.message);
+            } finally {
+                appState.isAnalyzing = false;
+                elements.analyzeBtn.classList.remove('loading');
+                elements.analyzeBtn.innerHTML = '<i class="fas fa-search me-2"></i>Phân tích thực phẩm';
+                elements.analyzeBtn.disabled = false;
+            }
+        }
+
+        function displayAnalysisResults(data) {
+            console.log('📋 Displaying results:', data);
+            
+            const resultsSection = document.getElementById('analysisResults');
+            const resultsContent = document.getElementById('resultsContent');
+            const confidenceBadge = document.getElementById('confidenceBadge');
+            const confidenceText = document.getElementById('confidenceText');
+            
+            if (!resultsSection || !resultsContent) {
+                console.error('❌ Results sections not found');
+                return;
+            }
+            
+            // Update confidence badge
+            const confidence = (data.probability || 0) * 100;
+            confidenceText.textContent = confidence.toFixed(1) + '%';
+            
+            if (confidence >= 80) {
+                confidenceBadge.className = 'confidence-badge';
+            } else if (confidence >= 60) {
+                confidenceBadge.className = 'confidence-badge low';
+            } else {
+                confidenceBadge.className = 'confidence-badge very-low';
+            }
+            
+            // Build nutrition display
+            let nutritionHtml = '';
+            if (data.nutrition && data.nutrition.items && data.nutrition.items.length > 0) {
+                const item = data.nutrition.items[0];
+                nutritionHtml = `
+                    <div class="nutrition-section">
+                        <h4 class="mb-3">Thông tin dinh dưỡng</h4>
+                        <div class="nutrition-grid">
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${item.calories || 0}</div>
+                                <div class="nutrition-label">Calories</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${item.protein_g || 0}<span class="nutrition-unit">g</span></div>
+                                <div class="nutrition-label">Protein</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${item.carbohydrates_total_g || 0}<span class="nutrition-unit">g</span></div>
+                                <div class="nutrition-label">Carbs</div>
+                            </div>
+                            <div class="nutrition-item">
+                                <div class="nutrition-value">${item.fat_total_g || 0}<span class="nutrition-unit">g</span></div>
+                                <div class="nutrition-label">Fat</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else {
+                nutritionHtml = '<div class="text-muted">Không có thông tin dinh dưỡng</div>';
+            }
+            
+            // Display food name and details
+            resultsContent.innerHTML = `
+                <div class="row">
+                    <div class="col-12">
+                        <h4 class="mb-3">
+                            Thực phẩm: <span class="food-name">${data.food_name || 'Không xác định'}</span>
+                        </h4>
+                        ${data.low_confidence ? '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>Độ tin cậy thấp - kết quả có thể không chính xác</div>' : ''}
+                    </div>
+                </div>
+                ${nutritionHtml}
+                ${data.ai_answer ? `
+                    <div class="ai-advice">
+                        <h5 class="ai-advice-title">
+                            <i class="fas fa-robot me-2"></i>
+                            Lời khuyên từ AI
+                        </h5>
+                        <p class="ai-advice-content">${data.ai_answer}</p>
+                    </div>
+                ` : ''}
+                ${data.alternatives && data.alternatives.length > 0 ? `
+                    <div class="mt-3">
+                        <h6>Các lựa chọn khác:</h6>
+                        <div class="d-flex flex-wrap gap-2">
+                            ${data.alternatives.map(alt => `<span class="badge bg-secondary">${alt}</span>`).join('')}
+                        </div>
+                    </div>
+                ` : ''}
+            `;
+            
+            // Show results section with animation
+            resultsSection.classList.remove('hidden');
+            resultsSection.classList.add('fade-in');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Chat Functions
+        async function sendChatMessage() {
+            const input = elements.chatInput;
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            console.log('💬 Sending chat message:', message);
+            input.value = '';
+            
+            // Add user message
+            addChatMessage(message, 'user');
+            
+            // Add loading message
+            const loadingId = 'loading-' + Date.now();
+            addChatMessage('Đang trả lời...', 'assistant', loadingId);
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/chat`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: message,
+                        context: appState.selectedImage ? 'Người dùng đã chụp/chọn ảnh thực phẩm.' : null
+                    })
+                });
+                
+                console.log('📥 Chat response status:', response.status);
+                
+                if (!response.ok) {
+                    const errorResult = await response.json();
+                    throw new Error(errorResult.error || `HTTP ${response.status}`);
+                }
+                
+                const result = await response.json();
+                console.log('💬 Chat result:', result);
+                
+                // Remove loading message
+                document.getElementById(loadingId)?.remove();
+                
+                if (result.error) {
+                    addChatMessage('Lỗi: ' + result.error, 'assistant');
+                } else if (result.response) {
+                    addChatMessage(result.response, 'assistant');
+                } else {
+                    addChatMessage('Xin lỗi, tôi không thể trả lời ngay bây giờ. Vui lòng thử lại sau.', 'assistant');
+                }
+                
+            } catch (error) {
+                console.error('❌ Chat error:', error);
+                document.getElementById(loadingId)?.remove();
+                addChatMessage('Lỗi kết nối. Vui lòng thử lại sau.', 'assistant');
+            }
+        }
+
+        function addChatMessage(message, sender, messageId = null) {
+            const chatMessages = elements.chatMessages;
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message message-${sender}`;
+            if (messageId) messageDiv.id = messageId;
+            
+            messageDiv.innerHTML = `
+                <div class="message-bubble">
+                    ${message}
+                </div>
+            `;
+            
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Utility Functions
+        function showLoading(text = 'Loading...') {
+            elements.loadingScreen.querySelector('.loading-text').textContent = text;
+            elements.loadingScreen.classList.remove('hidden');
+        }
+
+        function hideLoading() {
+            elements.loadingScreen.classList.add('hidden');
+        }
+
+        // Error Handling
+        window.addEventListener('error', function(e) {
+            console.error('❌ Global error:', e.error);
+        });
+
+        window.addEventListener('unhandledrejection', function(e) {
+            console.error('❌ Unhandled promise rejection:', e.reason);
+        });
+
+        console.log('✅ Food Ninja JavaScript loaded');
+    </script>
+</body>
+</html>

@@ -327,7 +327,7 @@ def chat():
     try:
         if not COHERE_API_KEY:
             return jsonify({'error': 'Missing COHERE_API_KEY'}), 500
-        client = ClientV2(api_key=COHERE_API_KEY)
+        client = Client(api_key=COHERE_API_KEY)
         response = client.chat(
             model="command-a-03-2025",
             messages=[{"role": "user", "content": user_message}],

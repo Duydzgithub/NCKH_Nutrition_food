@@ -44,6 +44,12 @@
   to = "https://foodninja-backend-latest.onrender.com/chat"
   status = 200
   force = true
+  
+  [[redirects]]
+  from = "/ask_ai"
+  to = "https://foodninja-backend-latest.onrender.com/ask_ai"
+  status = 200
+  force = true
 
 # SPA Fallback for PWA
 [[redirects]]
