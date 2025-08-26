@@ -35,19 +35,19 @@
 # API Redirects to Render Backend  
 [[redirects]]
   from = "/predict"
-  to = "https://foodninja-backend-latest.onrender.com/predict"
+  to = "https://nckh-nutrition-food.onrender.com/predict"
   status = 200
   force = true
 
 [[redirects]]
   from = "/chat"
-  to = "https://foodninja-backend-latest.onrender.com/chat"
+  to = "https://nckh-nutrition-food.onrender.com/chat"
   status = 200
   force = true
   
   [[redirects]]
   from = "/ask_ai"
-  to = "https://foodninja-backend-latest.onrender.com/ask_ai"
+  to = "https://nckh-nutrition-food.onrender.com/ask_ai"
   status = 200
   force = true
 
